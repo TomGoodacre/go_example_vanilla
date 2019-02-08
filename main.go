@@ -1,14 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go_example_vanilla/homepage"
+	todo "github.com/go_example_vanilla/todo_list"
 )
 
 func main() {
 	http.HandleFunc("/", homepage.Homepage)
-	err := http.ListenAndServe(":8080", nil)
-	fmt.Println("error = ", err)
+	http.HandleFunc("/todo_list", todo.CreatePage)
+	log.Fatal(
+		http.ListenAndServe(":8080", nil),
+	)
+
 }
