@@ -14,7 +14,12 @@ type Variables struct {
 	ToDoList []todoItem
 }
 
-//CreatePage creates the main todo page
-func CreatePage(w http.ResponseWriter, r *http.Request) {
+//EnterPage creates the main todo page, on navigation to the page
+func EnterPage(w http.ResponseWriter, r *http.Request) {
+
+}
+
+//AddItem adds a todo item to the list, and displays it
+func AddItem(w http.ResponseWriter, r *http.Request) {
 
 }

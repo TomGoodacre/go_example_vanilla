@@ -10,7 +10,8 @@ import (
 
 func main() {
 	http.HandleFunc("/", homepage.Homepage)
-	http.HandleFunc("/todo_list", todo.CreatePage)
+	http.HandleFunc("/todo_list", todo.EnterPage)
+	http.HandleFunc("/todo_list/add", todo.AddItem)
 	log.Fatal(
 		http.ListenAndServe(":8080", nil),
 	)
