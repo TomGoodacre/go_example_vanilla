@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go_raw_example/homepage"
+	"github.com/go_example_vanilla/homepage"
 )
 
 func main() {
