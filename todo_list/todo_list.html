@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="../resources/css/todo_add_form.css">
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script>
+</head>
+
+<body>
+
+    <a href="todo_list/add">Add a to-do</a>
+
+    <!--The todo list, created using data contained in the struct TodoList-->
+    {{with $1 := .TodoList}}
+    <div class="todo_list">
+        <h3>To-do list</h3>
+        {{range $1}}
+        <div class="todo_item">
+            <span>{{.DisplayTodoDate}}</span>
+            <span style="font-size: 8px;">added: {{.DisplayDateAdded}}</span>
+            <p>{{.Notes}}</p>
+            <input id="ajax_btn" type="button" value="delete">
+        </div>
+        {{end}}
+    </div>
+    {{end}}
+
+</body>
+
+</html>
+<script>
+        function deleteItem(i) {
+                  $.ajax({
+                    url: 'delete',
+                    type: 'post',
+                    dataType: 'html',
+                    data : { delete_index: i},
+                  });
+               
+         };
+         </script>

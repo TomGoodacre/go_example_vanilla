@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html>
-<style>
-  input[type=date],
+input[type=date],
   select {
-    
     padding: 12px 20px;
     margin: 8px 48px 0 0;
     display: inline-block;
@@ -14,7 +10,6 @@
 
   input[type=time],
   select {
-    
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -79,41 +74,3 @@
     padding: 10px;
     margin: 10px 0;
   }
-</style>
-
-<body>
-  <div class="add_todo">
-    <h3>Add a to-do!</h3>
-
-    <!--The form to create and add a new todo.-->
-    <div class="form_div">
-      <form action="/todo_list/add" method="post">
-        <label for="date">Date</label>
-        <input type="date" id="date" name="date">
-
-        <label for="time">Time</label>
-        <input type="time" id="time" name="time">
-
-        <input type="text" id="notes" name="notes" placeholder="Write your todo here...">
-
-        <input type="submit" value="Add todo">
-      </form>
-    </div>
-  </div>
-
-  <!--The todo list, created using data contained in the struct TodoList-->
-  {{with $1 := .TodoList}}
-  <div class="todo_list">
-    <h3>To-do list</h3>
-    {{range $1}}
-    <div class="todo_item">
-      <p>{{.DateTime}}</p>
-      <p>{{.Notes}}</p>
-    </div>
-    {{end}}
-  </div>
-  {{end}}
-
-</body>
-
-</html>
