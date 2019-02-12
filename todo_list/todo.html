@@ -1,87 +1,118 @@
 <!DOCTYPE html>
 <html>
 <style>
-    input[type=date], select {
-  width: 50%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+  input[type=date],
+  select {
+    
+    padding: 12px 20px;
+    margin: 8px 48px 0 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
 
-input[type=time], select {
-  width: 50%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+  input[type=time],
+  select {
+    
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
 
-input[type=text], select {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+  input[type=text],
+  select {
+    width: 90%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
 
-input[type=submit] {
-  width: 100%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+  input[type=submit] {
+    text-align: center;
+    align-self: auto;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
-input[type=submit]:hover {
-  background-color: #45a049;
-}
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
 
-.form_div {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
+  .add_todo {
+    border-radius: 5px;
+    background-color: #82c5df;
+    color: rgb(61, 70, 116);
+    margin: 20px;
+    padding: 10px;
+  }
+
+  .form_div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+
+  .todo_list {
+    border-radius: 5px;
+    background-color: #92a2d8;
+    color: rgb(61, 70, 116);
+    margin: 20px;
+    padding: 10px;
+  }
+
+  .todo_item {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    color: rgb(31, 41, 58);
+    padding: 10px;
+    margin: 10px 0;
+  }
 </style>
 
 <body>
+  <div class="add_todo">
+    <h3>Add a to-do!</h3>
 
-    <h3>To-do List</h3>
-
-    //The form to create and add a new todo.
+    <!--The form to create and add a new todo.-->
     <div class="form_div">
-        <form action="/todo_list/add" method="post">
-            <label for="date">Date</label>
-            <input type="date" id="date" name="firstname">
+      <form action="/todo_list/add" method="post">
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date">
 
-            <label for="time">Last Name</label>
-            <input type="time" id="time" name="time">
+        <label for="time">Time</label>
+        <input type="time" id="time" name="time">
 
-            <label for="todo">To do...</label>
-            <input type="text" id="todo" name="todo" placeholder="Write your todo here...">
+        <input type="text" id="notes" name="notes" placeholder="Write your todo here...">
 
-            <input type="submit" value="Add todo">
-        </form>
+        <input type="submit" value="Add todo">
+      </form>
     </div>
+  </div>
 
-    //The todo list, created using data contained in the struct TodoList
-    {{with $1 := .TodoList}}
-    <div>
-        {{range $1}}
-        <p>{{.DateTime}}\n</p>
-        <p>{{.Notes}}\n</p>
-        {{end}}
+  <!--The todo list, created using data contained in the struct TodoList-->
+  {{with $1 := .TodoList}}
+  <div class="todo_list">
+    <h3>To-do list</h3>
+    {{range $1}}
+    <div class="todo_item">
+      <p>{{.DateTime}}</p>
+      <p>{{.Notes}}</p>
     </div>
     {{end}}
+  </div>
+  {{end}}
 
 </body>
 
