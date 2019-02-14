@@ -11,15 +11,15 @@
     <a href="todo_list/add">Add a to-do</a>
 
     <!--The todo list, created using data contained in the struct TodoList-->
-    {{with $1 := .TodoList}}
+    {{with $list := .TodoList}}
     <div class="todo_list">
         <h3>To-do list</h3>
-        {{range $1}}
+        {{range $index, $item := . }}
         <div class="todo_item">
-            <span>{{.DisplayTodoDate}}</span>
-            <span style="font-size: 8px;">added: {{.DisplayDateAdded}}</span>
+            <span>{{$index}} {{.DisplayTodoDate}}</span>
+            <span style="font-size: 8px;">added: {{.DisplayDateAdded}}   </span><input id="btn" type="button" value="delete" onclick="deleteItem({$index})">
             <p>{{.Notes}}</p>
-            <input id="ajax_btn" type="button" value="delete">
+            
         </div>
         {{end}}
     </div>
@@ -28,16 +28,14 @@
 </body>
 
 </html>
-<!--
+
 <script>
     function deleteItem(i) {
         $.ajax({
-            url: 'delete',
+            url: 'todo_list/delete',
             type: 'post',
-            dataType: 'html',
-            data: { delete_index: i },
+            
+            data: { 'delete_index': i},
         });
-
     };
 </script>
--->

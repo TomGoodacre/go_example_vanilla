@@ -1,0 +1,10 @@
+version: "2"
+
+services: 
+  go_example_vanilla:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes: 
+      - .:/go/src/github.com/go_example_vanilla
+    command: go run main.go

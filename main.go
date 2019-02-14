@@ -12,8 +12,9 @@ func main() {
 	http.HandleFunc("/", homepage.Homepage)
 	http.HandleFunc("/todo_list", todo.ViewList)
 	http.HandleFunc("/todo_list/add", todo.AddItem)
+	http.HandleFunc("/todo_list/delete", todo.RemoveItem)
 
-	//Sreve static files with StripPrefix, in case the directory changes.
+	//Serve static files with StripPrefix, in case the directory changes.
 	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources"))))
 
 	log.Fatal(

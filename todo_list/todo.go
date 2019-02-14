@@ -21,6 +21,11 @@ type Variables struct {
 	TodoList []todoItem
 }
 
+//For the remove json
+type removeData struct {
+	deleteIndex int
+}
+
 var items []todoItem
 
 //ViewList creates the main todo page, on navigation to the page
@@ -57,12 +62,15 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 		log.Println("error in parsing form: ", err)
 	}
 
-	//r.Form is now map[date: [value], time: [value], notes: [value]]
+	//r.Form is now map[
+	//					date: [string (format: 2006-01-02)],
+	//					time: [string (format: 15:04)],
+	//					notes: [string],
+	//				   ]
 
-	//The date and time received from the form.
 	formDate := r.Form.Get("date") + " " + r.Form.Get("time")
-	//The layout of the time/date in formDate.
 	layout := "2006-01-02 15:04"
+
 	//Parse into a Time, in accordance with the above layout.
 	date, err := time.Parse(layout, formDate)
 	//Check for parsing error.
@@ -109,7 +117,10 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//RemoveItem removes a todo item from the list of items, and reserves the html
 func RemoveItem(w http.ResponseWriter, r *http.Request) {
+	ajaxData := r.FormValue("delete_index")
+	log.Println("ajax data: ", ajaxData)
 
 }
 
