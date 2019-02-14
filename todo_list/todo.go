@@ -5,15 +5,29 @@ import (
 	"log"
 	"net/http"
 	"sort"
+	"strconv"
 	"time"
 )
 
 type todoItem struct {
+	ID               int
 	dateAdded        time.Time
 	dateTodo         time.Time
 	DisplayDateAdded string
 	DisplayTodoDate  string
 	Notes            string
+}
+
+//struct にfuncを追加出来ます。classのメソッドみたい
+func (item todoItem) Urgency() string {
+	timeUntil := time.Until(item.dateTodo)
+	switch {
+	case timeUntil < time.Hour*24:
+		return "urgent"
+	default:
+		return "normal"
+	}
+
 }
 
 //Variables for the main todo page
@@ -26,12 +40,69 @@ type removeData struct {
 	deleteIndex int
 }
 
+var idCounter int
 var items []todoItem
 
 //ViewList creates the main todo page, on navigation to the page
 func ViewList(w http.ResponseWriter, r *http.Request) {
 	//Sort the todo list by todo time.
 	_sortByTodoTime(items)
+
+	//Serve todo_list.html
+	_showTodoListHTML(&w)
+}
+
+//EnterAddItem is used for navigating to the add_item page.
+func EnterAddItem(w http.ResponseWriter, r *http.Request) {
+	_showAddItemHTML(&w)
+}
+
+//AddItem adds a todo item to the list, and displays it
+func AddItem(w http.ResponseWriter, r *http.Request) {
+	log.Println("adding item...")
+
+	//Parse the values from the Request into a todoItem struct,
+	//and add it to the todoItem list
+	_addItemToList(r)
+
+	//Serve the html from the page html template, with the new item list.
+	_showAddItemHTML(&w)
+
+}
+
+//RemoveItem removes a todo item from the list of items, and reserves the html
+func RemoveItem(w http.ResponseWriter, r *http.Request) {
+	ajaxData := r.FormValue("delete_id")
+	log.Println("ajax data: ", ajaxData)
+
+	removeID, err := strconv.Atoi(ajaxData)
+	if err != nil {
+		log.Println("parsing error from remove index data")
+		return
+	}
+
+	removeIndex := -1
+	for i, item := range items {
+		if item.ID == removeID {
+			removeIndex = i
+			break
+		}
+	}
+
+	if removeIndex >= 0 {
+		//Delete an element, the golang way...
+		items = append(items[:removeIndex], items[removeIndex+1:]...)
+	}
+
+	log.Println("item deleted")
+
+	//Reserve the todo_list.html
+	_showTodoListHTML(&w)
+
+}
+
+func _showTodoListHTML(w *http.ResponseWriter) {
+	log.Println("showing todo_list.html")
 
 	//Store the todo list in the PageVars struct sent to todo.html
 	PageVars := Variables{
@@ -46,15 +117,14 @@ func ViewList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Execute the todo_list page
-	err = t.Execute(w, PageVars)
+	err = t.Execute(*w, PageVars)
 	//Check for errors
 	if err != nil {
 		log.Println("template execute error: ", err)
 	}
 }
 
-//AddItem adds a todo item to the list, and displays it
-func AddItem(w http.ResponseWriter, r *http.Request) {
+func _addItemToList(r *http.Request) {
 	//Populate the form with values passed in the request.
 	err := r.ParseForm()
 	//Check for parsing error.
@@ -83,6 +153,7 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 	if err == nil && notes != "" {
 		//Create a new todo, with a formatted date/time.
 		newTodo := todoItem{
+			ID:               idCounter,
 			dateAdded:        time.Now(),
 			dateTodo:         date,
 			DisplayDateAdded: time.Now().Format("02-Jan (Mon) 15:04"),
@@ -90,12 +161,16 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 			Notes:            notes,
 		}
 
+		idCounter++
+
 		//Insert the new todo into the start of the item list.
 		items = append([]todoItem{newTodo}, items...)
 
 		log.Println("todo item added")
 	}
+}
 
+func _showAddItemHTML(w *http.ResponseWriter) {
 	//Store the todo list in the PageVars struct sent to todo.html
 	PageVars := Variables{
 		TodoList: items,
@@ -109,19 +184,11 @@ func AddItem(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Execute the todo_list page
-	err = t.Execute(w, PageVars)
+	err = t.Execute(*w, PageVars)
 	//Check for execution error
 	if err != nil {
 		log.Println("template execute error: ", err)
 	}
-
-}
-
-//RemoveItem removes a todo item from the list of items, and reserves the html
-func RemoveItem(w http.ResponseWriter, r *http.Request) {
-	ajaxData := r.FormValue("delete_index")
-	log.Println("ajax data: ", ajaxData)
-
 }
 
 func _sortByTimeAdded(unsorted []todoItem) {

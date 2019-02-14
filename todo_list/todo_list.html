@@ -8,20 +8,25 @@
 
 <body>
 
-    <a href="todo_list/add">Add a to-do</a>
+    <a href="todo_list/add_item">Add a to-do</a>
 
     <!--The todo list, created using data contained in the struct TodoList-->
     {{with $list := .TodoList}}
     <div class="todo_list">
         <h3>To-do list</h3>
+
         {{range $index, $item := . }}
-        <div class="todo_item">
-            <span>{{$index}} {{.DisplayTodoDate}}</span>
-            <span style="font-size: 8px;">added: {{.DisplayDateAdded}}   </span><input id="btn" type="button" value="delete" onclick="deleteItem({$index})">
+        <div class="todo_item" id="item{{$index}}">
+            <span class="date_{{.Urgency}}">{{$index}} {{.DisplayTodoDate}}</span>
+            <span style="font-size: 8px;">added: {{.DisplayDateAdded}} </span>
+            <input  id="btn{{$index}}" 
+                    type="button" 
+                    value="delete" 
+                    onclick="deleteItem('{{.ID}}', '{{$index}}')">
             <p>{{.Notes}}</p>
-            
         </div>
         {{end}}
+
     </div>
     {{end}}
 
@@ -30,12 +35,14 @@
 </html>
 
 <script>
-    function deleteItem(i) {
+    function deleteItem(itemId, divId) {
         $.ajax({
             url: 'todo_list/delete',
             type: 'post',
-            
-            data: { 'delete_index': i},
+            data: { 'delete_id': itemId },
+            success: function () {
+                $("#item" + divId).remove();
+            }
         });
     };
 </script>
