@@ -1,33 +1,24 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <link rel="stylesheet" type="text/css" href="../resources/css/todo_add_form.css">
 </head>
-
 <body>
-
   <a href="/todo_list">Go to to-do list</a>
-
   <div class="add_todo">
     <h3>Add a to-do!</h3>
-
     <!--The form to create and add a new todo.-->
     <div class="form_div">
       <form action="/todo_list/add_new_item" method="post">
         <label for="date">Date</label>
         <input type="date" id="date" name="date">
-
         <label for="time">Time</label>
         <input type="time" id="time" name="time">
-
         <input type="text" id="notes" name="notes" placeholder="Write your todo here...">
-
         <input type="submit" value="Add to-do">
       </form>
     </div>
   </div>
-
   <!--The todo list, created using data contained in the struct TodoList-->
   {{with $1 := .TodoList}}
   <div class="todo_list">
@@ -41,7 +32,5 @@
     {{end}}
   </div>
   {{end}}
-
 </body>
-
 </html>
